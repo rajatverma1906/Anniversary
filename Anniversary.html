@@ -1,517 +1,596 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy 4 Years, My Love</title>
-    
+    <title>Our Endless Love</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary-purple: #4a195e;
-            --dark-purple: #1a0b2e;
-            --glow-pink: #ff9a9e;
-            --glow-purple: #d69eeb;
-            --text-light: #fef0ff;
+            --bg-deep: #080212;
+            --bg-mid: #1a082e;
+            --glow-pink: #ff2e93;
+            --glow-purple: #9d00ff;
+            --text-main: #f8f4ff;
+            --text-muted: #d4c5e3;
         }
 
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #2a0845 0%, #06010f 100%);
-            color: var(--text-light);
-            font-family: 'Montserrat', sans-serif;
-            overflow: hidden;
-            touch-action: manipulation;
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% 50%, var(--bg-mid) 0%, var(--bg-deep) 100%);
+            background-attachment: fixed;
         }
 
-        /* Typography */
-        .font-serif { font-family: 'Cormorant Garamond', serif; }
-        .font-script { font-family: 'Great Vibes', cursive; }
+        .font-serif { font-family: 'Cinzel', serif; }
+        .font-cursive { font-family: 'Great Vibes', cursive; }
 
-        /* Canvas Background */
-        #bgCanvas {
-            position: absolute;
-            top: 0;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: rgba(157, 0, 255, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 46, 147, 0.5); }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 
+                        inset 0 0 20px rgba(157, 0, 255, 0.1);
+            border-radius: 24px;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 
+                         0 0 20px rgba(157, 0, 255, 0.8), 
+                         0 0 40px rgba(255, 46, 147, 0.6);
+        }
+
+        .text-glow-subtle {
+            text-shadow: 0 0 10px rgba(157, 0, 255, 0.5);
+        }
+
+        .box-glow {
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.3), 
+                        0 0 40px rgba(255, 46, 147, 0.2);
+        }
+
+        .ambient-blur {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.5;
+            z-index: 0;
+            pointer-events: none;
+            animation: breathe 10s infinite alternate ease-in-out;
+        }
+
+        .ambient-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--glow-purple); }
+        .ambient-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: var(--glow-pink); animation-delay: -5s; }
+
+        @keyframes breathe {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.3; }
+            100% { transform: scale(1.2) translate(20px, 20px); opacity: 0.6; }
+        }
+
+        /* Waves Animation */
+        .wave-container {
+            position: fixed;
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            height: 30vh;
+            overflow: hidden;
             z-index: 1;
             pointer-events: none;
         }
-
-        /* UI Containers */
-        .ui-layer {
+        
+        .wave {
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
-            width: 100%;
+            width: 200%;
             height: 100%;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none; /* Let clicks pass through unless on specific elements */
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(157,0,255,0.15)" d="M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,160C672,160,768,192,864,208C960,224,1056,224,1152,208C1248,192,1344,160,1392,144L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: 50% 100%;
+            animation: waveAnim 20s linear infinite;
+            filter: drop-shadow(0 -10px 20px rgba(255,46,147,0.3));
+        }
+        .wave:nth-child(2) {
+            bottom: -20px;
+            opacity: 0.5;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg"><path fill="rgba(255,46,147,0.1)" d="M0,192L48,181.3C96,171,192,149,288,149.3C384,149,480,171,576,197.3C672,224,768,256,864,250.7C960,245,1056,203,1152,181.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') repeat-x;
+            background-size: 50% 100%;
+            animation: waveAnim 15s linear infinite reverse;
         }
 
-        .content-box {
-            pointer-events: auto;
-            text-align: center;
+        @keyframes waveAnim {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .flower-container {
+            position: fixed;
+            bottom: -20px;
+            width: 300px;
+            height: 400px;
+            z-index: 2;
+            pointer-events: none;
+            filter: drop-shadow(0 0 20px rgba(255, 46, 147, 0.4));
+        }
+
+        .flower-left { left: -50px; transform: scaleX(1) rotate(10deg); }
+        .flower-right { right: -50px; transform: scaleX(-1) rotate(10deg); }
+        
+        @media (max-width: 768px) {
+            .flower-container { width: 200px; height: 300px; bottom: -10px; }
+            .flower-left { left: -30px; }
+            .flower-right { right: -30px; }
+        }
+
+        /* SVG Inner Animations */
+        .f-stem { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: growStem 3s ease-out forwards; }
+        .f-leaf { transform: scale(0); transform-origin: bottom center; animation: growLeaf 1.5s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .f-petal { transform: scale(0) rotate(0deg); transform-origin: center bottom; animation: bloomPetal 2.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
+        .f-center { transform: scale(0); transform-origin: center; animation: bloomCenter 1s 4s ease-out forwards; opacity: 0; }
+        .f-glow { animation: pulseGlow 3s 4.5s infinite alternate; }
+
+        /* Stagger petals */
+        .p1 { animation-delay: 2.5s; } .p2 { animation-delay: 2.7s; } .p3 { animation-delay: 2.9s; }
+        .p4 { animation-delay: 3.1s; } .p5 { animation-delay: 3.3s; } .p6 { animation-delay: 3.5s; }
+
+        @keyframes growStem { to { stroke-dashoffset: 0; } }
+        @keyframes growLeaf { to { transform: scale(1); } }
+        @keyframes bloomPetal { to { transform: scale(1) rotate(var(--rot)); opacity: 1; } }
+        @keyframes bloomCenter { to { transform: scale(1); opacity: 1; box-shadow: 0 0 20px #fff; } }
+        @keyframes pulseGlow { 0% { filter: drop-shadow(0 0 10px rgba(255,46,147,0.5)); } 100% { filter: drop-shadow(0 0 30px rgba(255,46,147,1)); } }
+
+        /* Subtle float for the whole flower after blooming */
+        .flower-wrapper { animation: floatFlower 6s 5s ease-in-out infinite; transform-origin: bottom center; }
+        @keyframes floatFlower {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .reveal {
             opacity: 0;
-            transition: opacity 2s ease-in-out, transform 2s ease-out;
-            transform: translateY(20px);
-            padding: 2rem;
-            width: 90%;
-            max-width: 600px;
+            transform: translateY(50px) scale(0.95);
+            transition: all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-
-        .content-box.active {
+        .reveal.active {
             opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Glassmorphism Letter */
-        .glass-letter {
-            background: rgba(42, 8, 69, 0.3);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(214, 158, 235, 0.3);
-            border-radius: 20px;
-            box-shadow: 0 0 40px rgba(214, 158, 235, 0.1), 
-                        inset 0 0 20px rgba(255, 154, 158, 0.05);
-            padding: 2.5rem 2rem;
-        }
-
-        /* Text Glowing Effects */
-        .text-glow {
-            text-shadow: 0 0 10px rgba(214, 158, 235, 0.8), 
-                         0 0 20px rgba(214, 158, 235, 0.5);
+            transform: translateY(0) scale(1);
         }
         
-        .text-glow-pink {
-            text-shadow: 0 0 15px rgba(255, 154, 158, 0.9), 
-                         0 0 30px rgba(255, 154, 158, 0.6);
-            color: #ffd1ff;
-        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
 
-        /* Floating Animation for elements */
-        .floating {
-            animation: float 6s ease-in-out infinite;
+        /* Floating Cards */
+        .floating-card {
+            position: absolute;
+            animation: float 8s infinite ease-in-out;
+            z-index: 10;
         }
-
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        .fc-1 { top: 20%; left: 10%; animation-delay: 0s; }
+        .fc-2 { top: 60%; right: 10%; animation-delay: -2s; }
+        .fc-3 { top: 80%; left: 15%; animation-delay: -4s; }
+        .fc-4 { top: 30%; right: 15%; animation-delay: -6s; }
+
+        @media (max-width: 768px) {
+            .floating-card { display: none; } /* Hide on small screens to reduce clutter */
         }
 
-        /* Custom Button */
-        .glow-btn {
-            background: linear-gradient(45deg, var(--primary-purple), #833ab4);
-            border: 1px solid var(--glow-purple);
-            color: white;
-            padding: 12px 32px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            box-shadow: 0 0 15px rgba(214, 158, 235, 0.4);
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 600;
+        /* Initial Loader */
+        #loader {
+            position: fixed; inset: 0; background: var(--bg-deep); z-index: 9999;
+            display: flex; justify-content: center; align-items: center; flex-direction: column;
+            transition: opacity 1s ease;
         }
+        .heart-beat { animation: heartbeat 1.5s infinite; color: var(--glow-pink); font-size: 3rem; text-shadow: 0 0 20px var(--glow-pink); }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
 
-        .glow-btn:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 0 25px rgba(255, 154, 158, 0.8), 0 0 40px rgba(214, 158, 235, 0.6);
-            background: linear-gradient(45deg, #833ab4, #e1306c);
-        }
-
-        /* DM Style Bubble */
-        .dm-bubble {
-            background: #262626; /* Instagram dark mode bubble color */
-            color: white;
-            padding: 12px 20px;
-            border-radius: 22px;
-            display: inline-block;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            position: relative;
-            border-bottom-right-radius: 4px;
-        }
-        
-        /* Fade utilities */
-        .hidden-completely { display: none !important; }
-        
-        .fade-out {
-            opacity: 0 !important;
-            transition: opacity 1.5s ease-in-out !important;
-        }
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-fuchsia-500 selection:text-white">
 
-    <canvas id="bgCanvas"></canvas>
+    <audio id="bgMusic" loop src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_9b65fb74e2.mp3?filename=romantic-piano-110291.mp3"></audio>
 
-    <div class="ui-layer" id="uiLayer">
-        
-        <!-- Scene 1: The First Message -->
-        <div id="scene1" class="content-box">
-            <p class="font-serif text-2xl md:text-3xl text-gray-400 mb-6 tracking-wider">May 14, 2022</p>
-            <div class="dm-bubble font-sans">
-                Can we talk normal?
-            </div>
-            <p class="mt-4 font-serif text-lg text-purple-300 italic opacity-80">The message that started our forever.</p>
-        </div>
-
-        <!-- Scene 2: The Love Letter -->
-        <div id="scene2" class="content-box glass-letter hidden-completely floating">
-            <h1 class="font-script text-5xl md:text-7xl text-glow-pink mb-4">Happy 4 Years</h1>
-            <h2 class="font-serif text-2xl md:text-3xl text-glow mb-6">My Beautiful Love</h2>
-            
-            <div class="font-serif text-lg md:text-xl leading-relaxed text-gray-200 space-y-4 mb-8 text-left px-2 md:px-6">
-                <p>Four years ago today, I sent you a message hoping to just talk to you. I had no idea that simple question would lead me to the greatest love of my life.</p>
-                <p>Every single day since then, you have made my world brighter, softer, and so incredibly magical.</p>
-                <p>Thank you for your love, your beautiful soul, and for walking by my side. You are my dream come true.</p>
-                <p class="text-center font-script text-3xl text-glow-pink pt-4">I love you, infinitely.</p>
-            </div>
-
-            <button id="bloomBtn" class="glow-btn mt-2">See Our Love Bloom ✨</button>
-        </div>
-
-        <!-- Scene 3: Final message after flowers bloom -->
-        <div id="scene3" class="content-box hidden-completely">
-            <h1 class="font-script text-6xl md:text-8xl text-glow-pink mb-4 scale-animation">Forever & Always</h1>
-        </div>
-
+    <div id="loader">
+        <div class="heart-beat">❤️</div>
+        <p class="mt-4 text-sm tracking-[0.3em] uppercase text-fuchsia-300 opacity-70">Creating Magic</p>
+        <button id="enterBtn" class="mt-8 px-6 py-2 rounded-full border border-fuchsia-500/50 text-fuchsia-300 hover:bg-fuchsia-500/10 transition duration-300 opacity-0 transform translate-y-4">
+            Tap to Open
+        </button>
     </div>
 
+    <!-- Background Elements -->
+    <div class="ambient-blur ambient-1"></div>
+    <div class="ambient-blur ambient-2"></div>
+    <canvas id="particleCanvas" class="fixed inset-0 z-0 pointer-events-none opacity-60"></canvas>
+    
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <!-- LEFT FLOWER -->
+    <div class="flower-container flower-left">
+        <div class="flower-wrapper w-full h-full relative">
+            <svg viewBox="0 0 200 400" class="w-full h-full overflow-visible">
+                <defs>
+                    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#4ade80" />
+                        <stop offset="100%" stop-color="#14532d" />
+                    </linearGradient>
+                    <radialGradient id="petalGrad" cx="50%" cy="100%" r="100%">
+                        <stop offset="0%" stop-color="#ff2e93" />
+                        <stop offset="70%" stop-color="#a855f7" />
+                        <stop offset="100%" stop-color="#4c1d95" />
+                    </radialGradient>
+                </defs>
+                
+                <!-- Stem -->
+                <path class="f-stem" d="M100,400 Q80,250 100,100" fill="none" stroke="url(#stemGrad)" stroke-width="6" stroke-linecap="round"/>
+                
+                <!-- Leaves -->
+                <g class="f-leaf" style="transform-origin: 90px 300px;">
+                    <path d="M95,300 C50,280 20,320 10,350 C40,360 80,340 95,300Z" fill="url(#stemGrad)" opacity="0.8"/>
+                </g>
+                <g class="f-leaf" style="transform-origin: 95px 200px; animation-delay: 1.8s;">
+                    <path d="M98,200 C140,180 180,220 190,250 C160,260 120,240 98,200Z" fill="url(#stemGrad)" opacity="0.8"/>
+                </g>
+
+                <!-- Flower Head -->
+                <g transform="translate(100, 100)" class="f-glow">
+                    <!-- Back petals -->
+                    <path class="f-petal p1" style="--rot: -60deg;" d="M0,0 C-40,-50 -20,-100 0,-120 C20,-100 40,-50 0,0Z" fill="url(#petalGrad)"/>
+                    <path class="f-petal p2" style="--rot: 60deg;" d="M0,0 C-40,-50 -20,-100 0,-120 C20,-100 40,-50 0,0Z" fill="url(#petalGrad)"/>
+                    <!-- Middle petals -->
+                    <path class="f-petal p3" style="--rot: -30deg;" d="M0,0 C-35,-60 -15,-110 0,-130 C15,-110 35,-60 0,0Z" fill="url(#petalGrad)" opacity="0.9"/>
+                    <path class="f-petal p4" style="--rot: 30deg;" d="M0,0 C-35,-60 -15,-110 0,-130 C15,-110 35,-60 0,0Z" fill="url(#petalGrad)" opacity="0.9"/>
+                    <!-- Front petals -->
+                    <path class="f-petal p5" style="--rot: 0deg;" d="M0,0 C-30,-70 -10,-120 0,-140 C10,-120 30,-70 0,0Z" fill="url(#petalGrad)"/>
+                    
+                    <!-- Glowing Center -->
+                    <circle class="f-center" cx="0" cy="0" r="12" fill="#fff" filter="blur(2px)"/>
+                    <circle class="f-center" cx="0" cy="0" r="6" fill="#ffb86c" />
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- RIGHT FLOWER -->
+    <div class="flower-container flower-right">
+        <div class="flower-wrapper w-full h-full relative" style="animation-delay: -3s;">
+            <svg viewBox="0 0 200 400" class="w-full h-full overflow-visible">
+                 <!-- Reusing defs from left flower implicitly, but safe to redefine if strictly separate -->
+                <path class="f-stem" style="animation-delay: 0.5s;" d="M100,400 Q120,250 100,100" fill="none" stroke="url(#stemGrad)" stroke-width="6" stroke-linecap="round"/>
+                
+                <g class="f-leaf" style="transform-origin: 110px 320px; animation-delay: 2s;">
+                    <path d="M105,320 C150,300 180,340 190,370 C160,380 120,360 105,320Z" fill="url(#stemGrad)" opacity="0.8"/>
+                </g>
+
+                <g transform="translate(100, 100)" class="f-glow" style="animation-delay: 5s;">
+                    <path class="f-petal p1" style="--rot: -65deg; animation-delay: 3s;" d="M0,0 C-40,-50 -20,-100 0,-120 C20,-100 40,-50 0,0Z" fill="url(#petalGrad)"/>
+                    <path class="f-petal p2" style="--rot: 65deg; animation-delay: 3.2s;" d="M0,0 C-40,-50 -20,-100 0,-120 C20,-100 40,-50 0,0Z" fill="url(#petalGrad)"/>
+                    <path class="f-petal p3" style="--rot: -35deg; animation-delay: 3.4s;" d="M0,0 C-35,-60 -15,-110 0,-130 C15,-110 35,-60 0,0Z" fill="url(#petalGrad)"/>
+                    <path class="f-petal p4" style="--rot: 35deg; animation-delay: 3.6s;" d="M0,0 C-35,-60 -15,-110 0,-130 C15,-110 35,-60 0,0Z" fill="url(#petalGrad)"/>
+                    <path class="f-petal p5" style="--rot: 0deg; animation-delay: 3.8s;" d="M0,0 C-30,-70 -10,-120 0,-140 C10,-120 30,-70 0,0Z" fill="url(#petalGrad)"/>
+                    <circle class="f-center" style="animation-delay: 4.5s;" cx="0" cy="0" r="10" fill="#fff" filter="blur(2px)"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <div class="floating-card fc-1 reveal glass-panel px-6 py-3 border-fuchsia-500/30">
+        <p class="text-sm font-medium text-fuchsia-200">"You are my favorite person"</p>
+    </div>
+    <div class="floating-card fc-2 reveal delay-200 glass-panel px-6 py-3 border-purple-500/30">
+        <p class="text-sm font-medium text-purple-200">"You make my world brighter"</p>
+    </div>
+    <div class="floating-card fc-3 reveal delay-400 glass-panel px-6 py-3 border-pink-500/30">
+        <p class="text-sm font-medium text-pink-200">"Every flower reminds me of you"</p>
+    </div>
+    <div class="floating-card fc-4 reveal delay-100 glass-panel px-6 py-3 border-fuchsia-500/30">
+        <p class="text-sm font-medium text-fuchsia-200">"I’m lucky to have you"</p>
+    </div>
+
+    <main class="relative z-10">
+        
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col items-center justify-center text-center px-4 pt-20 pb-32">
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-glow tracking-wide reveal mb-4">
+                Happy Anniversary
+            </h1>
+            <h2 class="font-cursive text-4xl md:text-6xl text-fuchsia-300 reveal delay-200 mb-12 drop-shadow-lg">
+                My Love
+            </h2>
+            
+            <div class="w-full max-w-2xl mx-auto space-y-8 reveal delay-400 mt-8">
+                <p class="text-lg md:text-xl font-light text-gray-300 leading-relaxed">
+                    May 14, 2022 — The day everything beautiful began.
+                </p>
+                <div class="w-16 h-[1px] bg-gradient-to-r from-transparent via-fuchsia-500 to-transparent mx-auto"></div>
+                <p class="text-xl md:text-2xl font-serif italic text-fuchsia-200">
+                    "From one simple message..."<br>
+                    <span class="text-sm md:text-base font-sans font-light text-gray-400 not-italic mt-2 block">Can we talk normal?</span>
+                </p>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+        </section>
+
+        <!-- Message Section -->
+        <section class="min-h-screen flex items-center justify-center px-4 py-20 relative">
+            <div class="glass-panel p-8 md:p-12 max-w-3xl w-full text-center reveal box-glow relative overflow-hidden">
+                <!-- Inner glow ring -->
+                <div class="absolute -inset-4 bg-gradient-to-r from-fuchsia-600/20 to-purple-600/20 blur-2xl z-0 rounded-full"></div>
+                
+                <div class="relative z-10">
+                    <svg class="w-12 h-12 mx-auto mb-6 text-fuchsia-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <h3 class="font-serif text-3xl md:text-4xl text-glow-subtle mb-6">To 4 years of endless love...</h3>
+                    <p class="text-lg md:text-xl text-gray-300 font-light leading-relaxed mb-8">
+                        Laughter, unforgettable memories, and a bond that grows stronger with every passing day. 
+                        You are my today, my tomorrow, and my forever. Every moment with you feels like a dream I never want to wake up from.
+                    </p>
+                    <p class="font-cursive text-3xl text-fuchsia-300">Forever Yours</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timer Section -->
+        <section class="min-h-[80vh] flex flex-col items-center justify-center px-4 pb-32">
+            <h3 class="font-serif text-2xl md:text-3xl tracking-widest text-gray-400 uppercase mb-12 reveal">Time Together</h3>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 w-full max-w-4xl reveal delay-200">
+                <!-- Years -->
+                <div class="glass-panel flex flex-col items-center justify-center p-6 box-glow relative group">
+                    <div class="absolute inset-0 bg-fuchsia-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <span id="t-years" class="text-5xl md:text-6xl font-bold font-serif text-glow text-white z-10">0</span>
+                    <span class="text-sm tracking-widest uppercase text-fuchsia-300 mt-2 z-10">Years</span>
+                </div>
+                <!-- Months -->
+                <div class="glass-panel flex flex-col items-center justify-center p-6 box-glow relative group">
+                    <div class="absolute inset-0 bg-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <span id="t-months" class="text-5xl md:text-6xl font-bold font-serif text-glow text-white z-10">0</span>
+                    <span class="text-sm tracking-widest uppercase text-purple-300 mt-2 z-10">Months</span>
+                </div>
+                <!-- Days -->
+                <div class="glass-panel flex flex-col items-center justify-center p-6 box-glow relative group">
+                    <div class="absolute inset-0 bg-pink-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <span id="t-days" class="text-5xl md:text-6xl font-bold font-serif text-glow text-white z-10">0</span>
+                    <span class="text-sm tracking-widest uppercase text-pink-300 mt-2 z-10">Days</span>
+                </div>
+                <!-- Hours -->
+                <div class="glass-panel flex flex-col items-center justify-center p-6 box-glow relative group">
+                    <div class="absolute inset-0 bg-fuchsia-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    <span id="t-hours" class="text-5xl md:text-6xl font-bold font-serif text-glow text-white z-10">0</span>
+                    <span class="text-sm tracking-widest uppercase text-fuchsia-300 mt-2 z-10">Hours</span>
+                </div>
+            </div>
+            <div class="mt-16 reveal delay-400 text-center pb-20">
+                <p class="text-gray-400 font-light">And counting...</p>
+            </div>
+        </section>
+
+    </main>
+
     <script>
-        // DOM Elements
-        const scene1 = document.getElementById('scene1');
-        const scene2 = document.getElementById('scene2');
-        const scene3 = document.getElementById('scene3');
-        const bloomBtn = document.getElementById('bloomBtn');
-        const canvas = document.getElementById('bgCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Application State
-        let currentScene = 0;
-        let width, height;
-        
-        // Resize Canvas
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        // Sequence Timeline
-        function startSequence() {
-            // Show Scene 1
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. Interaction & Audio Setup ---
+            const loader = document.getElementById('loader');
+            const enterBtn = document.getElementById('enterBtn');
+            const audio = document.getElementById('bgMusic');
+            
+            // Show button after a short delay for dramatic effect
             setTimeout(() => {
-                scene1.classList.add('active');
-            }, 1000);
-
-            // Hide Scene 1, Show Scene 2
-            setTimeout(() => {
-                scene1.classList.remove('active');
-                setTimeout(() => {
-                    scene1.classList.add('hidden-completely');
-                    scene2.classList.remove('hidden-completely');
-                    // Small delay to allow display:block to apply before animating opacity
-                    setTimeout(() => scene2.classList.add('active'), 100);
-                }, 2000); // Wait for fade out
-            }, 6000); // Show scene 1 for 5 seconds
-        }
-
-        // Bloom Button Interaction
-        bloomBtn.addEventListener('click', () => {
-            scene2.classList.remove('active');
-            setTimeout(() => {
-                scene2.classList.add('hidden-completely');
-                triggerBloom();
-                
-                setTimeout(() => {
-                    scene3.classList.remove('hidden-completely');
-                    setTimeout(() => scene3.classList.add('active'), 100);
-                }, 4000); // Show final text after flowers grow
+                enterBtn.classList.remove('opacity-0', 'translate-y-4');
+                enterBtn.classList.add('opacity-100', 'translate-y-0');
             }, 2000);
-        });
 
-        // --- Canvas Animation System ---
-        
-        const particles = [];
-        const flowers = [];
-        let bloomingActive = false;
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 1 - 0.5;
-                this.speedY = Math.random() * -1 - 0.5;
-                this.opacity = Math.random() * 0.5 + 0.2;
+            enterBtn.addEventListener('click', () => {
+                // Try to play audio
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log("Audio autoplay prevented by browser"));
                 
-                // Color palette: Purple, Pink, Gold
-                const colors = [
-                    'rgba(214, 158, 235,', 
-                    'rgba(255, 154, 158,', 
-                    'rgba(255, 223, 186,'
-                ];
-                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
-            }
-
-            update() {
-                this.y += this.speedY;
-                this.x += this.speedX;
-                
-                // Swaying motion
-                this.x += Math.sin(this.y * 0.05) * 0.5;
-
-                // Reset at top
-                if (this.y < 0) {
-                    this.y = height;
-                    this.x = Math.random() * width;
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `${this.colorBase}${this.opacity})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = `${this.colorBase}0.8)`;
-                ctx.fill();
-                ctx.shadowBlur = 0; // Reset for performance
-            }
-        }
-
-        // Create initial ambient particles
-        for (let i = 0; i < 70; i++) {
-            particles.push(new Particle());
-        }
-
-        class GrowingFlower {
-            constructor(startX, startY) {
-                this.startX = startX;
-                this.startY = startY;
-                this.x = startX;
-                this.y = startY;
-                
-                // Randomize growth parameters
-                this.targetY = startY - (Math.random() * height * 0.5 + height * 0.2); // Grow up to 70% of screen
-                this.curveAmp = Math.random() * 40 + 20;
-                this.curveFreq = Math.random() * 0.02 + 0.01;
-                this.growthSpeed = Math.random() * 2 + 1;
-                
-                this.path = [{x: this.x, y: this.y}];
-                this.isFullyGrown = false;
-                
-                // Flower petal parameters
-                this.petalScale = 0;
-                this.maxPetalScale = Math.random() * 0.8 + 0.5;
-                
-                // Aesthetic colors (Purples & Pinks)
-                const hue = Math.random() * 40 + 280; // 280-320 is purple to pink
-                this.stemColor = `hsla(${hue}, 60%, 60%, 0.8)`;
-                this.flowerColor1 = `hsla(${hue - 20}, 90%, 70%, 1)`; // Outer petal
-                this.flowerColor2 = `hsla(${hue + 10}, 100%, 85%, 1)`; // Inner petal
-            }
-
-            update() {
-                if (!this.isFullyGrown) {
-                    // Grow stem
-                    this.y -= this.growthSpeed;
-                    
-                    // Curvy organic vine movement
-                    const progress = this.startY - this.y;
-                    this.x = this.startX + Math.sin(progress * this.curveFreq) * this.curveAmp;
-                    
-                    this.path.push({x: this.x, y: this.y});
-
-                    // Check if reached target height
-                    if (this.y <= this.targetY) {
-                        this.isFullyGrown = true;
-                        createSparkles(this.x, this.y, this.flowerColor1);
-                    }
-                } else if (this.petalScale < this.maxPetalScale) {
-                    // Bloom flower
-                    this.petalScale += 0.02;
-                }
-            }
-
-            draw() {
-                // Draw Stem (Vine)
-                if (this.path.length > 1) {
-                    ctx.beginPath();
-                    ctx.moveTo(this.path[0].x, this.path[0].y);
-                    for (let i = 1; i < this.path.length; i++) {
-                        ctx.lineTo(this.path[i].x, this.path[i].y);
-                    }
-                    ctx.strokeStyle = this.stemColor;
-                    ctx.lineWidth = 3;
-                    ctx.lineCap = 'round';
-                    ctx.shadowBlur = 8;
-                    ctx.shadowColor = this.stemColor;
-                    ctx.stroke();
-                    ctx.shadowBlur = 0;
-                }
-
-                // Draw Flower (Bloom)
-                if (this.isFullyGrown && this.petalScale > 0) {
-                    const finalX = this.path[this.path.length - 1].x;
-                    const finalY = this.path[this.path.length - 1].y;
-
-                    ctx.save();
-                    ctx.translate(finalX, finalY);
-                    ctx.scale(this.petalScale, this.petalScale);
-
-                    // Draw layered glowing petals
-                    this.drawPetals(this.flowerColor1, 15, 6, 0);
-                    this.drawPetals(this.flowerColor2, 10, 5, Math.PI / 4);
-                    
-                    // Center core
-                    ctx.beginPath();
-                    ctx.arc(0, 0, 4, 0, Math.PI * 2);
-                    ctx.fillStyle = '#fff9c4'; // Soft gold center
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = '#fff9c4';
-                    ctx.fill();
-
-                    ctx.restore();
-                }
-            }
-
-            drawPetals(color, radius, count, rotationOffset) {
-                ctx.fillStyle = color;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = color;
-                
-                for (let i = 0; i < count; i++) {
-                    const angle = (Math.PI * 2 / count) * i + rotationOffset;
-                    ctx.save();
-                    ctx.rotate(angle);
-                    
-                    // Draw a petal shape using bezier curves
-                    ctx.beginPath();
-                    ctx.moveTo(0, 0);
-                    ctx.bezierCurveTo(radius, -radius/2, radius, radius/2, 0, radius);
-                    ctx.bezierCurveTo(-radius, radius/2, -radius, -radius/2, 0, 0);
-                    ctx.fill();
-                    
-                    ctx.restore();
-                }
-            }
-        }
-
-        const sparkles = [];
-
-        class Sparkle {
-            constructor(x, y, color) {
-                this.x = x;
-                this.y = y;
-                this.color = color;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = (Math.random() - 0.5) * 6;
-                this.speedY = (Math.random() - 0.5) * 6;
-                this.life = 1.0;
-                this.decay = Math.random() * 0.02 + 0.02;
-            }
-            
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.life -= this.decay;
-                this.size *= 0.95; // Shrink
-            }
-            
-            draw() {
-                if (this.life <= 0) return;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.color.replace('1)', `${this.life})`); // Fade opacity
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
-                ctx.fill();
-            }
-        }
-
-        function createSparkles(x, y, color) {
-            for (let i = 0; i < 15; i++) {
-                sparkles.push(new Sparkle(x, y, color));
-            }
-        }
-
-        function triggerBloom() {
-            bloomingActive = true;
-            // Generate multiple flowers across the screen width from the bottom
-            const flowerCount = Math.floor(width / 50); // Responsive amount of flowers
-            
-            // Stagger their growth
-            for (let i = 0; i < flowerCount; i++) {
+                // Hide loader
+                loader.style.opacity = '0';
                 setTimeout(() => {
-                    // Distribute roughly evenly, with some randomness
-                    const xPos = (width / flowerCount) * i + (Math.random() * 40 - 20);
-                    flowers.push(new GrowingFlower(xPos, height + 20)); // Start slightly off bottom
-                }, Math.random() * 2000); // Stagger over 2 seconds
+                    loader.style.display = 'none';
+                    // Trigger initial scroll animations after load
+                    triggerReveals();
+                }, 1000);
+            });
+
+
+            // --- 2. Canvas Particle System (Stars & Hearts) ---
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            let particlesArray = [];
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                initParticles();
+            });
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * -1 - 0.2; // Move up slowly
+                    
+                    // 10% chance to be a heart instead of a star
+                    this.isHeart = Math.random() > 0.9;
+                    if(this.isHeart) {
+                        this.size = Math.random() * 8 + 4;
+                        this.color = `rgba(255, 46, 147, ${Math.random() * 0.5 + 0.1})`; // Pinkish
+                    } else {
+                        // Colors: White, light pink, light purple
+                        const colors = ['rgba(255,255,255,', 'rgba(255,182,255,', 'rgba(224,176,255,'];
+                        this.color = colors[Math.floor(Math.random() * colors.length)] + (Math.random() * 0.8 + 0.2) + ')';
+                    }
+                }
+                
+                // Draw heart shape
+                drawHeart(ctx, x, y, width, height) {
+                    ctx.save();
+                    ctx.beginPath();
+                    var topCurveHeight = height * 0.3;
+                    ctx.moveTo(x, y + topCurveHeight);
+                    // top left curve
+                    ctx.bezierCurveTo(x, y, x - width / 2, y, x - width / 2, y + topCurveHeight);
+                    // bottom left curve
+                    ctx.bezierCurveTo(x - width / 2, y + (height + topCurveHeight) / 2, x, y + (height + topCurveHeight) / 2, x, y + height);
+                    // bottom right curve
+                    ctx.bezierCurveTo(x, y + (height + topCurveHeight) / 2, x + width / 2, y + (height + topCurveHeight) / 2, x + width / 2, y + topCurveHeight);
+                    // top right curve
+                    ctx.bezierCurveTo(x + width / 2, y, x, y, x, y + topCurveHeight);
+                    ctx.closePath();
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.restore();
+                }
+
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+
+                    // Twinkle effect for stars
+                    if(!this.isHeart && Math.random() > 0.98) {
+                        this.size = Math.random() * 2 + 0.5;
+                    }
+
+                    // Reset if off screen
+                    if (this.y < -10 || this.x < -10 || this.x > canvas.width + 10) {
+                        this.y = canvas.height + 10;
+                        this.x = Math.random() * canvas.width;
+                    }
+                }
+                
+                draw() {
+                    if (this.isHeart) {
+                        this.drawHeart(ctx, this.x, this.y, this.size, this.size);
+                    } else {
+                        ctx.fillStyle = this.color;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
             }
 
-            // Increase particle speed for "magical wind" effect
-            particles.forEach(p => {
-                p.speedY -= Math.random() * 2;
-                p.speedX += (Math.random() - 0.5) * 2;
-            });
-        }
+            function initParticles() {
+                particlesArray = [];
+                let numberOfParticles = (canvas.width * canvas.height) / 6000; // Adjust density based on screen
+                if(window.innerWidth < 768) numberOfParticles = numberOfParticles / 2; // Less on mobile
 
-        // Main Animation Loop
-        function animate() {
-            // Semi-transparent black for trail effect
-            ctx.fillStyle = 'rgba(10, 3, 20, 0.2)'; 
-            ctx.fillRect(0, 0, width, height);
+                for (let i = 0; i < numberOfParticles; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
 
-            // Draw ambient background particles
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particlesArray.length; i++) {
+                    particlesArray[i].update();
+                    particlesArray[i].draw();
+                }
+                requestAnimationFrame(animateParticles);
+            }
 
-            // Draw growing flowers if active
-            if (bloomingActive) {
-                flowers.forEach(flower => {
-                    flower.update();
-                    flower.draw();
+            initParticles();
+            animateParticles();
+
+            // --- 3. Love Timer Logic ---
+            const startDate = new Date('2022-05-14T00:00:00').getTime();
+            
+            function updateTimer() {
+                const now = new Date().getTime();
+                const difference = now - startDate;
+
+                const dateStart = new Date(startDate);
+                const dateNow = new Date(now);
+
+                let years = dateNow.getFullYear() - dateStart.getFullYear();
+                let months = dateNow.getMonth() - dateStart.getMonth();
+                
+                if (months < 0 || (months === 0 && dateNow.getDate() < dateStart.getDate())) {
+                    years--;
+                    months += (months < 0 ? 12 : 11);
+                }
+
+                // Calculate days (approximate for display elegance, strict math can get complex with varying month lengths)
+                let tempDate = new Date(dateStart.getFullYear() + years, dateStart.getMonth() + months, dateStart.getDate());
+                let diffTime = Math.abs(dateNow - tempDate);
+                let days = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                
+                // Calculate remaining hours
+                const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+                document.getElementById('t-years').innerText = years;
+                document.getElementById('t-months').innerText = months;
+                document.getElementById('t-days').innerText = days;
+                document.getElementById('t-hours').innerText = hours.toString().padStart(2, '0');
+            }
+
+            setInterval(updateTimer, 1000);
+            updateTimer(); // Initial call
+
+
+            // --- 4. Scroll Reveal & Parallax Animations ---
+            function triggerReveals() {
+                const reveals = document.querySelectorAll('.reveal');
+                reveals.forEach(reveal => {
+                    const windowHeight = window.innerHeight;
+                    const elementTop = reveal.getBoundingClientRect().top;
+                    const elementVisible = 150;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                        reveal.classList.add('active');
+                    }
                 });
             }
 
-            // Draw sparkles
-            for (let i = sparkles.length - 1; i >= 0; i--) {
-                sparkles[i].update();
-                sparkles[i].draw();
-                if (sparkles[i].life <= 0) {
-                    sparkles.splice(i, 1);
-                }
+            window.addEventListener('scroll', triggerReveals);
+            
+            // Mouse Parallax for desktop only
+            if (window.innerWidth > 768) {
+                document.addEventListener('mousemove', (e) => {
+                    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+                    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+                    document.querySelectorAll('.floating-card').forEach(card => {
+                        card.style.transform = `translate(${x}px, ${y}px)`;
+                    });
+                    
+                    document.querySelector('.ambient-1').style.transform = `translate(${x*2}px, ${y*2}px) scale(1.1)`;
+                    document.querySelector('.ambient-2').style.transform = `translate(${-x*2}px, ${-y*2}px) scale(1.1)`;
+                });
             }
-
-            requestAnimationFrame(animate);
-        }
-
-        // Start everything when window loads
-        window.onload = () => {
-            animate();
-            startSequence();
-        };
+        });
     </script>
 </body>
 </html>
