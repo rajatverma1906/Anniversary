@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 4 Years, My Love</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --primary-purple: #4a195e;
+            --dark-purple: #1a0b2e;
+            --glow-pink: #ff9a9e;
+            --glow-purple: #d69eeb;
+            --text-light: #fef0ff;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #2a0845 0%, #06010f 100%);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        /* Typography */
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        .font-script { font-family: 'Great Vibes', cursive; }
+
+        /* Canvas Background */
+        #bgCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* UI Containers */
+        .ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Let clicks pass through unless on specific elements */
+        }
+
+        .content-box {
+            pointer-events: auto;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out, transform 2s ease-out;
+            transform: translateY(20px);
+            padding: 2rem;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .content-box.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Glassmorphism Letter */
+        .glass-letter {
+            background: rgba(42, 8, 69, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(214, 158, 235, 0.3);
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(214, 158, 235, 0.1), 
+                        inset 0 0 20px rgba(255, 154, 158, 0.05);
+            padding: 2.5rem 2rem;
+        }
+
+        /* Text Glowing Effects */
+        .text-glow {
+            text-shadow: 0 0 10px rgba(214, 158, 235, 0.8), 
+                         0 0 20px rgba(214, 158, 235, 0.5);
+        }
+        
+        .text-glow-pink {
+            text-shadow: 0 0 15px rgba(255, 154, 158, 0.9), 
+                         0 0 30px rgba(255, 154, 158, 0.6);
+            color: #ffd1ff;
+        }
+
+        /* Floating Animation for elements */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Custom Button */
+        .glow-btn {
+            background: linear-gradient(45deg, var(--primary-purple), #833ab4);
+            border: 1px solid var(--glow-purple);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 15px rgba(214, 158, 235, 0.4);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
+        }
+
+        .glow-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 154, 158, 0.8), 0 0 40px rgba(214, 158, 235, 0.6);
+            background: linear-gradient(45deg, #833ab4, #e1306c);
+        }
+
+        /* DM Style Bubble */
+        .dm-bubble {
+            background: #262626; /* Instagram dark mode bubble color */
+            color: white;
+            padding: 12px 20px;
+            border-radius: 22px;
+            display: inline-block;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            border-bottom-right-radius: 4px;
+        }
+        
+        /* Fade utilities */
+        .hidden-completely { display: none !important; }
+        
+        .fade-out {
+            opacity: 0 !important;
+            transition: opacity 1.5s ease-in-out !important;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="ui-layer" id="uiLayer">
+        
+        <!-- Scene 1: The First Message -->
+        <div id="scene1" class="content-box">
+            <p class="font-serif text-2xl md:text-3xl text-gray-400 mb-6 tracking-wider">May 14, 2022</p>
+            <div class="dm-bubble font-sans">
+                Can we talk normal?
+            </div>
+            <p class="mt-4 font-serif text-lg text-purple-300 italic opacity-80">The message that started our forever.</p>
+        </div>
+
+        <!-- Scene 2: The Love Letter -->
+        <div id="scene2" class="content-box glass-letter hidden-completely floating">
+            <h1 class="font-script text-5xl md:text-7xl text-glow-pink mb-4">Happy 4 Years</h1>
+            <h2 class="font-serif text-2xl md:text-3xl text-glow mb-6">My Beautiful Love</h2>
+            
+            <div class="font-serif text-lg md:text-xl leading-relaxed text-gray-200 space-y-4 mb-8 text-left px-2 md:px-6">
+                <p>Four years ago today, I sent you a message hoping to just talk to you. I had no idea that simple question would lead me to the greatest love of my life.</p>
+                <p>Every single day since then, you have made my world brighter, softer, and so incredibly magical.</p>
+                <p>Thank you for your love, your beautiful soul, and for walking by my side. You are my dream come true.</p>
+                <p class="text-center font-script text-3xl text-glow-pink pt-4">I love you, infinitely.</p>
+            </div>
+
+            <button id="bloomBtn" class="glow-btn mt-2">See Our Love Bloom ✨</button>
+        </div>
+
+        <!-- Scene 3: Final message after flowers bloom -->
+        <div id="scene3" class="content-box hidden-completely">
+            <h1 class="font-script text-6xl md:text-8xl text-glow-pink mb-4 scale-animation">Forever & Always</h1>
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const scene1 = document.getElementById('scene1');
+        const scene2 = document.getElementById('scene2');
+        const scene3 = document.getElementById('scene3');
+        const bloomBtn = document.getElementById('bloomBtn');
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Application State
+        let currentScene = 0;
+        let width, height;
+        
+        // Resize Canvas
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Sequence Timeline
+        function startSequence() {
+            // Show Scene 1
+            setTimeout(() => {
+                scene1.classList.add('active');
+            }, 1000);
+
+            // Hide Scene 1, Show Scene 2
+            setTimeout(() => {
+                scene1.classList.remove('active');
+                setTimeout(() => {
+                    scene1.classList.add('hidden-completely');
+                    scene2.classList.remove('hidden-completely');
+                    // Small delay to allow display:block to apply before animating opacity
+                    setTimeout(() => scene2.classList.add('active'), 100);
+                }, 2000); // Wait for fade out
+            }, 6000); // Show scene 1 for 5 seconds
+        }
+
+        // Bloom Button Interaction
+        bloomBtn.addEventListener('click', () => {
+            scene2.classList.remove('active');
+            setTimeout(() => {
+                scene2.classList.add('hidden-completely');
+                triggerBloom();
+                
+                setTimeout(() => {
+                    scene3.classList.remove('hidden-completely');
+                    setTimeout(() => scene3.classList.add('active'), 100);
+                }, 4000); // Show final text after flowers grow
+            }, 2000);
+        });
+
+        // --- Canvas Animation System ---
+        
+        const particles = [];
+        const flowers = [];
+        let bloomingActive = false;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * -1 - 0.5;
+                this.opacity = Math.random() * 0.5 + 0.2;
+                
+                // Color palette: Purple, Pink, Gold
+                const colors = [
+                    'rgba(214, 158, 235,', 
+                    'rgba(255, 154, 158,', 
+                    'rgba(255, 223, 186,'
+                ];
+                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                
+                // Swaying motion
+                this.x += Math.sin(this.y * 0.05) * 0.5;
+
+                // Reset at top
+                if (this.y < 0) {
+                    this.y = height;
+                    this.x = Math.random() * width;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `${this.colorBase}${this.opacity})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `${this.colorBase}0.8)`;
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset for performance
+            }
+        }
+
+        // Create initial ambient particles
+        for (let i = 0; i < 70; i++) {
+            particles.push(new Particle());
+        }
+
+        class GrowingFlower {
+            constructor(startX, startY) {
+                this.startX = startX;
+                this.startY = startY;
+                this.x = startX;
+                this.y = startY;
+                
+                // Randomize growth parameters
+                this.targetY = startY - (Math.random() * height * 0.5 + height * 0.2); // Grow up to 70% of screen
+                this.curveAmp = Math.random() * 40 + 20;
+                this.curveFreq = Math.random() * 0.02 + 0.01;
+                this.growthSpeed = Math.random() * 2 + 1;
+                
+                this.path = [{x: this.x, y: this.y}];
+                this.isFullyGrown = false;
+                
+                // Flower petal parameters
+                this.petalScale = 0;
+                this.maxPetalScale = Math.random() * 0.8 + 0.5;
+                
+                // Aesthetic colors (Purples & Pinks)
+                const hue = Math.random() * 40 + 280; // 280-320 is purple to pink
+                this.stemColor = `hsla(${hue}, 60%, 60%, 0.8)`;
+                this.flowerColor1 = `hsla(${hue - 20}, 90%, 70%, 1)`; // Outer petal
+                this.flowerColor2 = `hsla(${hue + 10}, 100%, 85%, 1)`; // Inner petal
+            }
+
+            update() {
+                if (!this.isFullyGrown) {
+                    // Grow stem
+                    this.y -= this.growthSpeed;
+                    
+                    // Curvy organic vine movement
+                    const progress = this.startY - this.y;
+                    this.x = this.startX + Math.sin(progress * this.curveFreq) * this.curveAmp;
+                    
+                    this.path.push({x: this.x, y: this.y});
+
+                    // Check if reached target height
+                    if (this.y <= this.targetY) {
+                        this.isFullyGrown = true;
+                        createSparkles(this.x, this.y, this.flowerColor1);
+                    }
+                } else if (this.petalScale < this.maxPetalScale) {
+                    // Bloom flower
+                    this.petalScale += 0.02;
+                }
+            }
+
+            draw() {
+                // Draw Stem (Vine)
+                if (this.path.length > 1) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.path[0].x, this.path[0].y);
+                    for (let i = 1; i < this.path.length; i++) {
+                        ctx.lineTo(this.path[i].x, this.path[i].y);
+                    }
+                    ctx.strokeStyle = this.stemColor;
+                    ctx.lineWidth = 3;
+                    ctx.lineCap = 'round';
+                    ctx.shadowBlur = 8;
+                    ctx.shadowColor = this.stemColor;
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                }
+
+                // Draw Flower (Bloom)
+                if (this.isFullyGrown && this.petalScale > 0) {
+                    const finalX = this.path[this.path.length - 1].x;
+                    const finalY = this.path[this.path.length - 1].y;
+
+                    ctx.save();
+                    ctx.translate(finalX, finalY);
+                    ctx.scale(this.petalScale, this.petalScale);
+
+                    // Draw layered glowing petals
+                    this.drawPetals(this.flowerColor1, 15, 6, 0);
+                    this.drawPetals(this.flowerColor2, 10, 5, Math.PI / 4);
+                    
+                    // Center core
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 4, 0, Math.PI * 2);
+                    ctx.fillStyle = '#fff9c4'; // Soft gold center
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#fff9c4';
+                    ctx.fill();
+
+                    ctx.restore();
+                }
+            }
+
+            drawPetals(color, radius, count, rotationOffset) {
+                ctx.fillStyle = color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = color;
+                
+                for (let i = 0; i < count; i++) {
+                    const angle = (Math.PI * 2 / count) * i + rotationOffset;
+                    ctx.save();
+                    ctx.rotate(angle);
+                    
+                    // Draw a petal shape using bezier curves
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.bezierCurveTo(radius, -radius/2, radius, radius/2, 0, radius);
+                    ctx.bezierCurveTo(-radius, radius/2, -radius, -radius/2, 0, 0);
+                    ctx.fill();
+                    
+                    ctx.restore();
+                }
+            }
+        }
+
+        const sparkles = [];
+
+        class Sparkle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 6;
+                this.speedY = (Math.random() - 0.5) * 6;
+                this.life = 1.0;
+                this.decay = Math.random() * 0.02 + 0.02;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= this.decay;
+                this.size *= 0.95; // Shrink
+            }
+            
+            draw() {
+                if (this.life <= 0) return;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color.replace('1)', `${this.life})`); // Fade opacity
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+            }
+        }
+
+        function createSparkles(x, y, color) {
+            for (let i = 0; i < 15; i++) {
+                sparkles.push(new Sparkle(x, y, color));
+            }
+        }
+
+        function triggerBloom() {
+            bloomingActive = true;
+            // Generate multiple flowers across the screen width from the bottom
+            const flowerCount = Math.floor(width / 50); // Responsive amount of flowers
+            
+            // Stagger their growth
+            for (let i = 0; i < flowerCount; i++) {
+                setTimeout(() => {
+                    // Distribute roughly evenly, with some randomness
+                    const xPos = (width / flowerCount) * i + (Math.random() * 40 - 20);
+                    flowers.push(new GrowingFlower(xPos, height + 20)); // Start slightly off bottom
+                }, Math.random() * 2000); // Stagger over 2 seconds
+            }
+
+            // Increase particle speed for "magical wind" effect
+            particles.forEach(p => {
+                p.speedY -= Math.random() * 2;
+                p.speedX += (Math.random() - 0.5) * 2;
+            });
+        }
+
+        // Main Animation Loop
+        function animate() {
+            // Semi-transparent black for trail effect
+            ctx.fillStyle = 'rgba(10, 3, 20, 0.2)'; 
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw ambient background particles
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Draw growing flowers if active
+            if (bloomingActive) {
+                flowers.forEach(flower => {
+                    flower.update();
+                    flower.draw();
+                });
+            }
+
+            // Draw sparkles
+            for (let i = sparkles.length - 1; i >= 0; i--) {
+                sparkles[i].update();
+                sparkles[i].draw();
+                if (sparkles[i].life <= 0) {
+                    sparkles.splice(i, 1);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Start everything when window loads
+        window.onload = () => {
+            animate();
+            startSequence();
+        };
+    </script>
+</body>
+</html>
